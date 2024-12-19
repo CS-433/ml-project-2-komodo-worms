@@ -1,0 +1,26 @@
+{
+  "directories": {
+    "raw": "Lifespan",
+    "processed": "Lifespan_processed",
+    "clustered": "Lifespan_clustered",
+    "cleaned": "Lifespan_cleaned",
+    "features": "Lifespan_features",
+    "plots": "plots"
+  },
+  "processing": {
+    "chunk_size": 10799,
+    "session_length": 900,
+    "gap_hours": 5.5
+  },
+  "initial_clustering": {
+    "distance_threshold": 10,
+    "max_neighbors": 20,
+    "time_threshold": 1800
+  },
+  "cleaning": {
+    "min_points": 100,
+    "span": 0.0,
+    "proximity": 0.0,
+    "max_size": 99999
+  }
+} 

@@ -1,0 +1,39 @@
+{
+    "model": {
+        "hidden_size": 32,
+        "num_layers": 2,
+        "dropout": 0.7
+    },
+    "training": {
+        "batch_size": 8,
+        "num_epochs": 500,
+        "learning_rate": 0.0002,
+        "weight_decay": 1e-3,
+        "max_frame": 20000,
+        "scale_factor": 100000,
+        "num_folds": 4,
+        "scheduler": {
+            "factor": 0.5,
+            "patience": 30
+        },
+        "early_stopping": {
+            "patience": 1000,
+            "min_delta": 1e-4
+        },
+        "gradient_clip": 1.0,
+        "selected_features": [
+            "num_frames",
+            "radius_of_gyration",
+            "std_angular_velocity", 
+            "max_speed",
+            "state_transitions",
+            "roaming_frequency",
+            "min_speed"
+        ]
+    },
+    "data": {
+        "base_dir": "data/Lifespan_features",
+        "subdirs": ["control", "Terbinafin", "controlTerbinafin", "companyDrug"]
+    },
+    "random_seed": 44
+} 
