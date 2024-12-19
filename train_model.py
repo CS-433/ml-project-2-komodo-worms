@@ -12,6 +12,7 @@ import pandas as pd
 import json
 import argparse
 from pathlib import Path
+import pickle
 
 # Load configuration
 with open('train_model_config.json', 'r') as f:
@@ -580,6 +581,7 @@ def k_fold_cross_validation(features, lifespans, lengths, files, groups, feature
     # Store metrics for each fold
     fold_metrics_list = []  # Initialize the list to store fold metrics
     all_predictions = []
+    fold_models = []
     
     print(f"\nStarting {k}-fold stratified cross-validation...")
     print("\nGroup distribution:")
@@ -651,6 +653,7 @@ def k_fold_cross_validation(features, lifespans, lengths, files, groups, feature
             device, fold + 1
         )
         all_fold_metrics.append(fold_metrics)
+        fold_models.append(model)
         
         # Evaluate final performance
         val_loss, predictions, targets, val_error = evaluate_model(model, val_loader, nn.MSELoss(), device, config)
@@ -711,7 +714,7 @@ def k_fold_cross_validation(features, lifespans, lengths, files, groups, feature
     # Plot aggregate metrics
     plot_all_folds_metrics(all_fold_metrics)
     
-    return fold_metrics_list, all_predictions
+    return fold_metrics_list, all_predictions, fold_models
 
 def main():
     # Add argument parser
@@ -792,12 +795,31 @@ def main():
     
     try:
         # Perform k-fold cross-validation
-        k_fold_cross_validation(
+        fold_metrics_list, all_predictions, fold_models = k_fold_cross_validation(
             all_features, all_lifespans, all_lengths, all_files, all_groups,
             feature_scaler, CONFIG, input_size
         )
     finally:
         os.chdir(original_cwd)
 
+    # Select the best fold based on lowest MAPE
+    best_index = min(range(len(fold_metrics_list)), key=lambda i: fold_metrics_list[i]['mape'])
+    best_fold = fold_metrics_list[best_index]
+    best_model = fold_models[best_index]
+    
+    os.makedirs('trained_model', exist_ok=True)
+    
+    # Save the best model
+    torch.save(best_model.state_dict(), "trained_model/best_model.pth")
+    
+    # Save the scaler
+    with open("trained_model/feature_scaler.pkl", "wb") as f:
+        pickle.dump(feature_scaler, f)
+
+    # Save the config
+    with open("trained_model/final_config.json", "w") as f:
+        json.dump(CONFIG, f, indent=2)
+    
+    
 if __name__ == "__main__":
     main() 
