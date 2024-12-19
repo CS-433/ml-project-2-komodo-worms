@@ -15,8 +15,8 @@ The data is organized within the `./data/Lifespan` directory and follows the str
 #### **Subfolders**
 - **`companyDrug`**: Data from worms exposed to a specific drug.
 - **`control`**: Data from worms without drug exposure.
-- **`Terbinafin`**: Data from worms exposed to Terbinafin.
-- **`controlTerbinafin`**: Data from worms without drug exposure.
+- **`Drug2`**: Data from worms exposed to Drug2.
+- **`controlDrug2`**: Data from worms without drug exposure.
 
 > **Note:** The folder names listed above are **examples** and can be different. You can add additional subfolders to accommodate different drug conditions as needed.
 
@@ -99,7 +99,7 @@ Ensure that the JSON configuration file `train_model_config.json` contains the c
 
 "base_dir": "data/Lifespan_features",
 
-"subdirs": ["control", "Terbinafin", "controlTerbinafin", "companyDrug"]
+"subdirs": ["control", "Drug2", "controlDrug2", "companyDrug"]
 
 }
 
